@@ -4,6 +4,7 @@
     "name": "GInfinity"
   },
   "version": "0.0.1",
+  "description": "This is a third-party Minecraft Mod Manager.",
   "license": "MIT",
   "repository": {
     "type": "git",
