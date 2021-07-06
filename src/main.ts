@@ -1,3 +1,4 @@
+require("update-electron-app")();
 import { app, BrowserWindow } from "electron";
 
 function createWindow() {

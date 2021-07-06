@@ -5,6 +5,10 @@
   },
   "version": "0.0.1",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GamingInfinite/Voidforge.git"
+  },
   "main": "./src/main.js",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.57",
@@ -18,7 +22,8 @@
   "dependencies": {
     "@popperjs/core": "^2.9.2",
     "bootstrap": "^5.0.2",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "update-electron-app": "^2.0.1"
   },
   "scripts": {
     "transpile": "tsc .\\src\\main.ts",
