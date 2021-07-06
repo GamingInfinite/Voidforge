@@ -41,7 +41,6 @@ function readSettings() {
     path.join(app.getPath("userData"), "settings.json")
   );
   settingsJson = JSON.parse(rawSettingsJson.toString());
-  console.log(settingsJson);
 }
 
 function writeSettings() {
@@ -51,7 +50,6 @@ function writeSettings() {
 
 app.whenReady().then(() => {
   createWindow();
-  console.log(app.getPath("userData"));
   try {
     if (fs.existsSync(path.join(app.getPath("userData"), "settings.json"))) {
       console.log("Proceeding Normally");

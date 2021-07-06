@@ -33,7 +33,6 @@ function createWindow() {
 function readSettings() {
     var rawSettingsJson = fs.readFileSync(path.join(electron_1.app.getPath("userData"), "settings.json"));
     settingsJson = JSON.parse(rawSettingsJson.toString());
-    console.log(settingsJson);
 }
 function writeSettings() {
     var data = JSON.stringify(settingsJson);
@@ -41,7 +40,6 @@ function writeSettings() {
 }
 electron_1.app.whenReady().then(function () {
     createWindow();
-    console.log(electron_1.app.getPath("userData"));
     try {
         if (fs.existsSync(path.join(electron_1.app.getPath("userData"), "settings.json"))) {
             console.log("Proceeding Normally");

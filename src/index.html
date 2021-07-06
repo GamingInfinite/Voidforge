@@ -21,7 +21,51 @@
   <body>
     <div class="container">
       <div class="row py-2">
-        <div class="col-12">Hello World</div>
+        <div class="col-12">
+          <nav class="navbar navbar-light bg-dark rounded-pill">
+            <div class="container-fluid justify-content-end">
+              <a
+                id="settingsBtn"
+                target="_blank"
+                class="btn btn-outline-success"
+              >
+                Settings
+              </a>
+              <button id="prevPage" class="btn btn-outline-success mx-2">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                  <use
+                    xlink:href="../node_modules/bootstrap-icons/bootstrap-icons.svg#arrow-left"
+                  />
+                </svg>
+              </button>
+              <div id="pgNumber" class="text-success fs-4 align-bottom mb-0">
+                1
+              </div>
+              <button id="nextPage" class="btn btn-outline-success mx-2">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                  <use
+                    xlink:href="../node_modules/bootstrap-icons/bootstrap-icons.svg#arrow-right"
+                  />
+                </svg>
+              </button>
+              <form class="d-flex">
+                <input
+                  class="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  id="searchInput"
+                />
+                <input
+                  id="searchButton"
+                  class="btn btn-outline-success"
+                  type="button"
+                  value="Search"
+                />
+              </form>
+            </div>
+          </nav>
+        </div>
       </div>
     </div>
   </body>
