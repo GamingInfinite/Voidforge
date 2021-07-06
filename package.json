@@ -27,13 +27,15 @@
   },
   "scripts": {
     "transpile": "tsc .\\src\\main.ts",
-    "start": "electron-forge start",
+    "start": "yarn transpile && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": ".\\assets\\icon"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

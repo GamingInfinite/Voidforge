@@ -5,9 +5,14 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false,
   });
 
   win.loadFile("./src/index.html");
+
+  win.once("ready-to-show", () => {
+    win.show();
+  });
 }
 
 app.whenReady().then(() => {
