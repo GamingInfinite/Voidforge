@@ -1,5 +1,5 @@
 require("update-electron-app")();
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import * as fs from "fs";
 import * as path from "path";
 import * as curseforge from "mc-curseforge-api";
@@ -151,7 +151,14 @@ function getPage(
     });
 }
 
-ipcMain.on("test", function (event, data) {
-  console.log(data);
-  event.sender.send("test");
+ipcMain.on("select-dir", async (event) => {
+  const result = await dialog.showOpenDialog(settings, {
+    properties: ["openDirectory"],
+  });
+  
+  event.sender.send("recieveDir", result.filePaths[0]);
+});
+
+ipcMain.on("requestIDir", function(event) {
+  event.sender.send("instanceDir", settingsJson.directory)
 })
