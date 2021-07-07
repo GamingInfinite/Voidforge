@@ -157,6 +157,8 @@ ipcMain.on("select-dir", async (event) => {
   });
   
   event.sender.send("recieveDir", result.filePaths[0]);
+  settingsJson.directory = result.filePaths[0];
+  writeSettings();
 });
 
 ipcMain.on("requestIDir", function(event) {

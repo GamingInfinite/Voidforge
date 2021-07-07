@@ -182,6 +182,8 @@ electron_1.ipcMain.on("select-dir", function (event) { return __awaiter(void 0, 
             case 1:
                 result = _a.sent();
                 event.sender.send("recieveDir", result.filePaths[0]);
+                settingsJson.directory = result.filePaths[0];
+                writeSettings();
                 return [2 /*return*/];
         }
     });
