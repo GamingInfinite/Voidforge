@@ -150,3 +150,8 @@ function getPage(
       }
     });
 }
+
+ipcMain.on("test", function (event, data) {
+  console.log(data);
+  event.sender.send("test");
+})
