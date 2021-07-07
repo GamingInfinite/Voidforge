@@ -8,8 +8,9 @@ var win: BrowserWindow;
 var settings: BrowserWindow;
 
 var pgSize = 10;
-var version = ""
+var version = "";
 var pLength = 0;
+var pgNumber = 0;
 
 var settingsJson = {
   directory: "unset",
@@ -79,11 +80,37 @@ ipcMain.on("openSettings", function (event, data) {
   event.sender.send("settingsOpen", result);
 });
 
+ipcMain.on("requestPage", function (event, data) {
+  if (data[1] == "first") {
+    getPage(pgNumber, data[0], event);
+  } else if (data[1] == "left") {
+    if (pgNumber > 0) {
+      pgNumber--;
+      event.sender.send("clear")
+      getPage(pgNumber, data[0], event);
+    }
+  } else if (data[1] == "right") {
+    if (pLength >= 10) {
+      pgNumber++;
+      event.sender.send("clear")
+      getPage(pgNumber, data[0], event);
+    }
+  }
+});
+
+ipcMain.on("requestPgNumber", function (event) {
+  event.sender.send("receivePgNumber", pgNumber);
+})
+
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
 });
 
-function getPageSearch(pgNum: number, searchword: string) {
+function getPage(
+  pgNum: number,
+  searchword: string,
+  event: Electron.IpcMainEvent
+) {
   curseforge
     .getMods({
       searchFilter: searchword,
@@ -108,7 +135,7 @@ function getPageSearch(pgNum: number, searchword: string) {
             mod.logo.thumbnailUrl,
             mod.url,
           ];
-          win.webContents.send("getPage", packet);
+          event.sender.send("receivePage", packet);
         } else {
           var packet = [
             mod.name,
@@ -117,7 +144,7 @@ function getPageSearch(pgNum: number, searchword: string) {
             "./images/nothumb.png",
             mod.url,
           ];
-          win.webContents.send("getPage", packet);
+          event.sender.send("receivePage", packet);
         }
       }
     });

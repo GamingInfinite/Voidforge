@@ -4,8 +4,13 @@ require("update-electron-app")();
 var electron_1 = require("electron");
 var fs = require("fs");
 var path = require("path");
+var curseforge = require("mc-curseforge-api");
 var win;
 var settings;
+var pgSize = 10;
+var version = "";
+var pLength = 0;
+var pgNumber = 0;
 var settingsJson = {
     directory: "unset",
     instances: {}
@@ -60,9 +65,72 @@ electron_1.ipcMain.on("openSettings", function (event, data) {
     settings.once("ready-to-show", function () {
         settings.show();
     });
-    event.sender.send("actionReply", result);
+    event.sender.send("settingsOpen", result);
+});
+electron_1.ipcMain.on("requestPage", function (event, data) {
+    if (data[1] == "first") {
+        getPage(pgNumber, data[0], event);
+    }
+    else if (data[1] == "left") {
+        if (pgNumber > 0) {
+            pgNumber--;
+            event.sender.send("clear");
+            getPage(pgNumber, data[0], event);
+        }
+    }
+    else if (data[1] == "right") {
+        if (pLength >= 10) {
+            pgNumber++;
+            event.sender.send("clear");
+            getPage(pgNumber, data[0], event);
+        }
+    }
+});
+electron_1.ipcMain.on("requestPgNumber", function (event) {
+    event.sender.send("receivePgNumber", pgNumber);
 });
 electron_1.app.on("window-all-closed", function () {
     if (process.platform !== "darwin")
         electron_1.app.quit();
 });
+function getPage(pgNum, searchword, event) {
+    curseforge
+        .getMods({
+        searchFilter: searchword,
+        index: pgNum * pgSize,
+        pageSize: pgSize,
+        gameVersion: version
+    })
+        .then(function (mods) {
+        var length = 0;
+        for (var _i = 0, _a = Object.keys(mods); _i < _a.length; _i++) {
+            var mod = _a[_i];
+            length++;
+        }
+        pLength = length;
+        for (var index = 0; index < length; index++) {
+            //@ts-ignore
+            var mod = mods[index];
+            if (mod.logo) {
+                var packet = [
+                    mod.name,
+                    mod.authors[0].name,
+                    mod.summary,
+                    mod.logo.thumbnailUrl,
+                    mod.url,
+                ];
+                event.sender.send("receivePage", packet);
+            }
+            else {
+                var packet = [
+                    mod.name,
+                    mod.authors[0].name,
+                    mod.summary,
+                    "./images/nothumb.png",
+                    mod.url,
+                ];
+                event.sender.send("receivePage", packet);
+            }
+        }
+    });
+}
