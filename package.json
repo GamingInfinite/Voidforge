@@ -31,7 +31,7 @@
     "update-electron-app": "^2.0.1"
   },
   "scripts": {
-    "transpile": "tsc .\\src\\main.ts && tsc .\\src\\eindex\\index.ts",
+    "transpile": "tsc .\\src\\main.ts && tsc .\\src\\index\\index.ts && tsc .\\src\\settings\\settings.ts",
     "start": "yarn transpile && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"

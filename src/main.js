@@ -109,7 +109,6 @@ function getPage(pgNum, searchword, event) {
         for (var index = 0; index < length; index++) {
             //@ts-ignore
             var mod = mods[index];
-            console.log(mod);
             if (mod.logo) {
                 var packet = [
                     mod.name,

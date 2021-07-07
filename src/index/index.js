@@ -1,3 +1,4 @@
+//@ts-ignore
 var ipcRenderer = require("electron").ipcRenderer;
 var settingsBtn = document.getElementById("settingsBtn");
 var leftButton = document.getElementById("prevPage");

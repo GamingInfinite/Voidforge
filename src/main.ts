@@ -69,6 +69,10 @@ ipcMain.on("openSettings", function (event, data) {
     parent: win,
     modal: true,
     show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
 
   settings.loadFile("./src/settings/settings.html");
