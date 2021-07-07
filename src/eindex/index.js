@@ -65,11 +65,11 @@ function createElement(eType, attributes, attValues, inlineText) {
     }
     return element;
 }
-ipcRenderer.on("receivePgNumber", function (event, data) {
+ipcRenderer.on("updatePgNumber", function (event, data) {
     pgNumber = data;
+    update();
 });
 function update() {
-    ipcRenderer.send("requestPgNumber");
-    pgDisplay.innerHTML = pgNumber.toString();
+    pgDisplay.innerHTML = (pgNumber + 1).toString();
 }
 ipcRenderer.send("requestPage", [lastArgs, "first"]);

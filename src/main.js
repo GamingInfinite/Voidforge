@@ -74,20 +74,17 @@ electron_1.ipcMain.on("requestPage", function (event, data) {
     else if (data[1] == "left") {
         if (pgNumber > 0) {
             pgNumber--;
-            event.sender.send("clear");
+            event.sender.send("updatePgNumber", pgNumber);
             getPage(pgNumber, data[0], event);
         }
     }
     else if (data[1] == "right") {
         if (pLength >= 10) {
             pgNumber++;
-            event.sender.send("clear");
+            event.sender.send("updatePgNumber", pgNumber);
             getPage(pgNumber, data[0], event);
         }
     }
-});
-electron_1.ipcMain.on("requestPgNumber", function (event) {
-    event.sender.send("receivePgNumber", pgNumber);
 });
 electron_1.app.on("window-all-closed", function () {
     if (process.platform !== "darwin")
@@ -108,6 +105,7 @@ function getPage(pgNum, searchword, event) {
             length++;
         }
         pLength = length;
+        event.sender.send("clear");
         for (var index = 0; index < length; index++) {
             //@ts-ignore
             var mod = mods[index];

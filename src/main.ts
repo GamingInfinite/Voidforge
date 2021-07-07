@@ -86,21 +86,17 @@ ipcMain.on("requestPage", function (event, data) {
   } else if (data[1] == "left") {
     if (pgNumber > 0) {
       pgNumber--;
-      event.sender.send("clear")
+      event.sender.send("updatePgNumber", pgNumber);
       getPage(pgNumber, data[0], event);
     }
   } else if (data[1] == "right") {
     if (pLength >= 10) {
       pgNumber++;
-      event.sender.send("clear")
+      event.sender.send("updatePgNumber", pgNumber);
       getPage(pgNumber, data[0], event);
     }
   }
 });
-
-ipcMain.on("requestPgNumber", function (event) {
-  event.sender.send("receivePgNumber", pgNumber);
-})
 
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
@@ -124,9 +120,11 @@ function getPage(
         length++;
       }
       pLength = length;
+      event.sender.send("clear");
       for (let index = 0; index < length; index++) {
         //@ts-ignore
         const mod = mods[index];
+        console.log(mod);
         if (mod.logo) {
           var packet = [
             mod.name,
