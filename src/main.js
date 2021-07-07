@@ -14,21 +14,16 @@ function createWindow() {
     win = new electron_1.BrowserWindow({
         width: 1200,
         height: 800,
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
     });
-    // settings = new BrowserWindow({
-    //   parent: win,
-    //   modal: true,
-    //   show: false,
-    // });
     win.loadFile("./src/index.html");
-    // settings.loadFile("./src/settings/settings.html");
     win.once("ready-to-show", function () {
         win.show();
     });
-    // settings.once("ready-to-show", () => {
-    //   settings.show();
-    // });
 }
 function readSettings() {
     var rawSettingsJson = fs.readFileSync(path.join(electron_1.app.getPath("userData"), "settings.json"));
@@ -53,6 +48,19 @@ electron_1.app.whenReady().then(function () {
         console.log("Executing Order 66...");
     }
     readSettings();
+});
+electron_1.ipcMain.on("openSettings", function (event, data) {
+    var result = data;
+    settings = new electron_1.BrowserWindow({
+        parent: win,
+        modal: true,
+        show: false
+    });
+    settings.loadFile("./src/settings/settings.html");
+    settings.once("ready-to-show", function () {
+        settings.show();
+    });
+    event.sender.send("actionReply", result);
 });
 electron_1.app.on("window-all-closed", function () {
     if (process.platform !== "darwin")

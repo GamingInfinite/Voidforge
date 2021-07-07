@@ -1,10 +1,15 @@
 require("update-electron-app")();
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import * as fs from "fs";
 import * as path from "path";
+import * as curseforge from "mc-curseforge-api";
 
 var win: BrowserWindow;
 var settings: BrowserWindow;
+
+var pgSize = 10;
+var version = ""
+var pLength = 0;
 
 var settingsJson = {
   directory: "unset",
@@ -16,24 +21,17 @@ function createWindow() {
     width: 1200,
     height: 800,
     show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
 
-  // settings = new BrowserWindow({
-  //   parent: win,
-  //   modal: true,
-  //   show: false,
-  // });
-
   win.loadFile("./src/index.html");
-  // settings.loadFile("./src/settings/settings.html");
 
   win.once("ready-to-show", () => {
     win.show();
   });
-
-  // settings.once("ready-to-show", () => {
-  //   settings.show();
-  // });
 }
 
 function readSettings() {
@@ -63,6 +61,64 @@ app.whenReady().then(() => {
   readSettings();
 });
 
+ipcMain.on("openSettings", function (event, data) {
+  var result = data;
+
+  settings = new BrowserWindow({
+    parent: win,
+    modal: true,
+    show: false,
+  });
+
+  settings.loadFile("./src/settings/settings.html");
+
+  settings.once("ready-to-show", () => {
+    settings.show();
+  });
+
+  event.sender.send("settingsOpen", result);
+});
+
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
 });
+
+function getPageSearch(pgNum: number, searchword: string) {
+  curseforge
+    .getMods({
+      searchFilter: searchword,
+      index: pgNum * pgSize,
+      pageSize: pgSize,
+      gameVersion: version,
+    })
+    .then((mods) => {
+      var length = 0;
+      for (let mod of Object.keys(mods)) {
+        length++;
+      }
+      pLength = length;
+      for (let index = 0; index < length; index++) {
+        //@ts-ignore
+        const mod = mods[index];
+        if (mod.logo) {
+          var packet = [
+            mod.name,
+            mod.authors[0].name,
+            mod.summary,
+            mod.logo.thumbnailUrl,
+            mod.url,
+          ];
+          win.webContents.send("getPage", packet);
+        } else {
+          var packet = [
+            mod.name,
+            mod.authors[0].name,
+            mod.summary,
+            "./images/nothumb.png",
+            mod.url,
+          ];
+          win.webContents.send("getPage", packet);
+        }
+      }
+    });
+}

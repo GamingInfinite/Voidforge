@@ -26,11 +26,12 @@
     "bootstrap-icons": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "fs": "^0.0.1-security",
+    "mc-curseforge-api": "^2.2.3",
     "path": "^0.12.7",
     "update-electron-app": "^2.0.1"
   },
   "scripts": {
-    "transpile": "tsc .\\src\\main.ts",
+    "transpile": "tsc .\\src\\main.ts && tsc .\\src\\eindex\\index.ts",
     "start": "yarn transpile && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
