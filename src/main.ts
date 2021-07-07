@@ -124,7 +124,6 @@ function getPage(
       for (let index = 0; index < length; index++) {
         //@ts-ignore
         const mod = mods[index];
-        console.log(mod);
         if (mod.logo) {
           var packet = [
             mod.name,
