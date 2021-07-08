@@ -20,6 +20,10 @@ leftButton.addEventListener("click", function () {
 rightButton.addEventListener("click", function () {
     ipcRenderer.send("requestPage", [lastArgs, "right"]);
 });
+searchButton.addEventListener("click", function () {
+    lastArgs = searchInput.value;
+    ipcRenderer.send("requestPage", [lastArgs, "first"]);
+});
 ipcRenderer.on("receivePage", function (event, packet) {
     var modName = packet[0];
     var modAuth = packet[1];
@@ -53,6 +57,7 @@ function clearMods() {
         modList[0].remove();
     }
 }
+//@ts-ignore
 function createElement(eType, attributes, attValues, inlineText) {
     var element = document.createElement(eType);
     for (var index = 0; index < attributes.length; index++) {

@@ -6,6 +6,7 @@ import * as curseforge from "mc-curseforge-api";
 
 var win: BrowserWindow;
 var settings: BrowserWindow;
+var exec = require("child_process").execFile;
 
 var pgSize = 10;
 var version = "";
@@ -14,7 +15,8 @@ var pgNumber = 0;
 
 var settingsJson = {
   directory: "unset",
-  instances: {},
+  instances: [],
+  lastInstanceIndex: 0
 };
 
 function createWindow() {
@@ -86,6 +88,7 @@ ipcMain.on("openSettings", function (event, data) {
 
 ipcMain.on("requestPage", function (event, data) {
   if (data[1] == "first") {
+    pgNumber = 0;
     getPage(pgNumber, data[0], event);
   } else if (data[1] == "left") {
     if (pgNumber > 0) {
@@ -99,6 +102,17 @@ ipcMain.on("requestPage", function (event, data) {
       event.sender.send("updatePgNumber", pgNumber);
       getPage(pgNumber, data[0], event);
     }
+  }
+});
+
+ipcMain.on("requestInstances", function (event, data) {
+  if (settingsJson.instances.length == 0) {
+    event.sender.send("receiveInstances", "none");
+  }
+  for (let index = 0; index < settingsJson.instances.length; index++) {
+    const element = settingsJson.instances[index];
+    var packet = [element.name, element.modloader, element.version, index+1];
+    event.sender.send("receiveInstances", packet);
   }
 });
 
@@ -155,12 +169,21 @@ ipcMain.on("select-dir", async (event) => {
   const result = await dialog.showOpenDialog(settings, {
     properties: ["openDirectory"],
   });
-  
+
   event.sender.send("recieveDir", result.filePaths[0]);
   settingsJson.directory = result.filePaths[0];
   writeSettings();
 });
 
-ipcMain.on("requestIDir", function(event) {
-  event.sender.send("instanceDir", settingsJson.directory)
-})
+ipcMain.on("requestIDir", function (event) {
+  event.sender.send("instanceDir", settingsJson.directory);
+});
+
+async function openMCLauncher() {
+  const result = await dialog.showOpenDialog(win, {
+    properties: ["openFile"],
+    filters: [{ name: "Minecraft Launcher", extensions: ["exe"] }],
+  });
+
+  exec(result.filePaths[0]);
+}

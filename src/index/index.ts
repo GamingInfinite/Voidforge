@@ -5,7 +5,7 @@ var settingsBtn = document.getElementById("settingsBtn");
 var leftButton = document.getElementById("prevPage");
 var rightButton = document.getElementById("nextPage");
 var searchButton = document.getElementById("searchButton");
-var searchInput = document.getElementById("searchInput");
+var searchInput = <HTMLInputElement>document.getElementById("searchInput");
 var pgDisplay = document.getElementById("pgNumber");
 
 var lastArgs = "";
@@ -26,6 +26,11 @@ rightButton.addEventListener("click", function () {
   ipcRenderer.send("requestPage", [lastArgs, "right"]);
 });
 
+searchButton.addEventListener("click", function () {
+  lastArgs = searchInput.value;
+  ipcRenderer.send("requestPage", [lastArgs, "first"]);
+});
+
 ipcRenderer.on("receivePage", function (event, packet) {
   var modName = packet[0];
   var modAuth = packet[1];
@@ -34,7 +39,7 @@ ipcRenderer.on("receivePage", function (event, packet) {
   var modPageUrl = packet[4];
 
   var mods = document.getElementById("mods");
-  var cardContainer = createElement("div", ["class"], ["col mod"]);
+  var cardContainer = createElement("div", ["class"], ["col bg-dark mod"]);
   var card = createElement("div", ["class"], ["card rounded-5"]);
   var cardImage = createElement(
     "img",
@@ -77,6 +82,7 @@ function clearMods() {
   }
 }
 
+//@ts-ignore
 function createElement(
   eType: string,
   attributes: string[],
@@ -102,7 +108,7 @@ ipcRenderer.on("updatePgNumber", function (event, data) {
 });
 
 function update() {
-  pgDisplay.innerHTML = (pgNumber+1).toString();
+  pgDisplay.innerHTML = (pgNumber + 1).toString();
 }
 
 ipcRenderer.send("requestPage", [lastArgs, "first"]);

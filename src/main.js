@@ -43,13 +43,16 @@ var path = require("path");
 var curseforge = require("mc-curseforge-api");
 var win;
 var settings;
+var exec = require("child_process").execFile;
 var pgSize = 10;
 var version = "";
 var pLength = 0;
 var pgNumber = 0;
 var settingsJson = {
     directory: "unset",
-    instances: {}
+    instances: [
+        { name: "Test Instance", modloader: "Fabric", version: "1.17.1" },
+    ]
 };
 function createWindow() {
     win = new electron_1.BrowserWindow({
@@ -109,6 +112,7 @@ electron_1.ipcMain.on("openSettings", function (event, data) {
 });
 electron_1.ipcMain.on("requestPage", function (event, data) {
     if (data[1] == "first") {
+        pgNumber = 0;
         getPage(pgNumber, data[0], event);
     }
     else if (data[1] == "left") {
@@ -191,3 +195,20 @@ electron_1.ipcMain.on("select-dir", function (event) { return __awaiter(void 0, 
 electron_1.ipcMain.on("requestIDir", function (event) {
     event.sender.send("instanceDir", settingsJson.directory);
 });
+function openMCLauncher() {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, electron_1.dialog.showOpenDialog(win, {
+                        properties: ["openFile"],
+                        filters: [{ name: "Minecraft Launcher", extensions: ["exe"] }]
+                    })];
+                case 1:
+                    result = _a.sent();
+                    exec(result.filePaths[0]);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
