@@ -93,6 +93,23 @@ function createElement(eType, attributes, attValues, inlineText) {
 }
 var instanceSelector = document.getElementById("instanceSelector");
 function reload() {
-    var selector = createElement("select", ["class", "aria-label"], ["form-select", "No Instance Selected"]);
-    instanceSelector.appendChild(selector);
+    clearInstances();
+    ipcRenderer.send("requestInstances");
 }
+ipcRenderer.on("receiveInstances", function (event, data) {
+    if (data != "none") {
+        var opt = createElement("option", ["value", "class"], [data[3], "instance"], data[0]);
+        var modloaderBadge = createElement("span", ["class"], ["badge bg-primary"], data[1]);
+        var versionBadge = createElement("span", ["class"], ["badge bg-secondary"], data[2]);
+        opt.appendChild(modloaderBadge);
+        opt.appendChild(versionBadge);
+        instanceSelector.appendChild(opt);
+    }
+});
+function clearInstances() {
+    var instances = document.getElementsByClassName("instance");
+    while (instances.length > 0) {
+        instances[0].remove();
+    }
+}
+reload();

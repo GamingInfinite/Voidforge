@@ -39,8 +39,8 @@ ipcRenderer.on("receivePage", function (event, packet) {
   var modPageUrl = packet[4];
 
   var mods = document.getElementById("mods");
-  var cardContainer = createElement("div", ["class"], ["col bg-dark mod"]);
-  var card = createElement("div", ["class"], ["card rounded-5"]);
+  var cardContainer = createElement("div", ["class"], ["col mod"]);
+  var card = createElement("div", ["class"], ["card bg-dark rounded-5"]);
   var cardImage = createElement(
     "img",
     ["class", "src", "alt"],

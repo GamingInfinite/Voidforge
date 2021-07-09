@@ -50,9 +50,8 @@ var pLength = 0;
 var pgNumber = 0;
 var settingsJson = {
     directory: "unset",
-    instances: [
-        { name: "Test Instance", modloader: "Fabric", version: "1.17.1" },
-    ]
+    instances: [],
+    lastInstanceIndex: 0
 };
 function createWindow() {
     win = new electron_1.BrowserWindow({
@@ -128,6 +127,16 @@ electron_1.ipcMain.on("requestPage", function (event, data) {
             event.sender.send("updatePgNumber", pgNumber);
             getPage(pgNumber, data[0], event);
         }
+    }
+});
+electron_1.ipcMain.on("requestInstances", function (event, data) {
+    if (settingsJson.instances.length == 0) {
+        event.sender.send("receiveInstances", "none");
+    }
+    for (var index = 0; index < settingsJson.instances.length; index++) {
+        var element = settingsJson.instances[index];
+        var packet = [element.name, element.modloader, element.version, index + 1];
+        event.sender.send("receiveInstances", packet);
     }
 });
 electron_1.app.on("window-all-closed", function () {
