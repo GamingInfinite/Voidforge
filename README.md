@@ -2,7 +2,7 @@
 
 
 
-
+**If Anyone feels like contributing, opening a pull request, forking it, whatever.  Go Ahead.  I've lost interest in this project after I found out GDLauncher exists.  I might still continue this project as a website, something based in alpine.js maybe, but not in electron.  Electron gets bulky really quickly and really hard to figure out where something is going wrong, especially since the docs are very vague about how to interact with the DOM from the main code where nodejs is.**
 
 ## About
 This project is a third-party, Electron-based, modmanager for modded Minecraft, meant to be faster, and more robust than the current Curseforge client.
