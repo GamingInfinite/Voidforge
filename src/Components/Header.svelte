@@ -8,15 +8,24 @@
 </script>
 
 {#if $username}
-  <div class="user-bio">
+  <div
+    class="d-flex justify-content-end align-items-center py-1 pe-4 fs-4"
+    id="header"
+  >
     <span>
       Hello <strong>$username</strong>
     </span>
-  </div>
-  <button class="signout-button" on:click={signout}>Sign Out</button>
-{:else}
-  <div class="d-flex justify-content-end align-items-center">
+    <button class="signout-button" on:click={signout}>Sign Out</button>
     <img src="images/icon.png" id="logo" alt="um" />
-    <a id="logo-text">Voidforge</a>
+    Voidforge
+  </div>
+{:else}
+  <div
+    class="d-flex justify-content-end align-items-center py-1 pe-4 fs-4"
+    id="header"
+  >
+    <button class="signin-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#signinmodal">Sign In</button>
+    <img src="images/icon.png" id="logo" alt="um" />
+    Voidforge
   </div>
 {/if}
