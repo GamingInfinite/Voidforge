@@ -30,6 +30,10 @@
   max-width: auto;
 }
 
+.app {
+  background-color: rgb(146, 146, 146);
+}
+
 html {
   overflow-x: hidden;
 }

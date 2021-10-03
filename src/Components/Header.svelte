@@ -1,5 +1,6 @@
 <script>
   import { username, user } from "../user";
+  import SignIn from "./SignIn.svelte";
 
   function signout() {
     user.leave();
@@ -24,8 +25,15 @@
     class="d-flex justify-content-end align-items-center py-1 pe-4 fs-4"
     id="header"
   >
-    <button class="signin-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#signinmodal">Sign In</button>
+    <button
+      class="signin-button btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#signinmodal"
+    >
+      Sign In
+    </button>
     <img src="images/icon.png" id="logo" alt="um" />
     Voidforge
   </div>
+  <SignIn />
 {/if}

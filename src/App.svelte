@@ -2,6 +2,7 @@
   import Header from "./Components/Header.svelte";
   import Footer from "./Components/Footer.svelte";
   import Draggable from "./Components/Draggable.svelte";
+  import Chat from "./Components/Chat.svelte";
 </script>
 
 <div class="app">
@@ -21,7 +22,7 @@
       </div>
       <div class="row" id="Chat">
         <div class="col">
-          <div class="d-flex justify-content-center p-2 fs-5">Test</div>
+          <Chat />
         </div>
       </div>
     </div>
